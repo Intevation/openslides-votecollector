@@ -110,6 +110,47 @@ angular.module('OpenSlidesApp.openslides_votecollector', ['OpenSlidesApp.users',
                     });
                     return keypad ? keypad.isActive() : undefined;
                 }
+            },
+            computed: {
+                label: [function () {
+                    var organisation = '';
+                    switch (this.seating_plan_y_axis) {
+                        case 1: case 2:
+                            organisation = 'IG Metall';
+                            break;
+                        case 3:
+                            organisation = 'ver.di';
+                            break;
+                        case 4:
+                            organisation = 'IG BCE';
+                            break;
+                        case 5:
+                            organisation = 'IG BAU';
+                            break;
+                        case 6:
+                            organisation = 'GdP';
+                            break;
+                        case 7:
+                            organisation = 'NGG';
+                            break;
+                        case 8:
+                            organisation = 'GEW';
+                            break;
+                        case 9:
+                            organisation = 'EVG';
+                            break;
+                        default:
+                            organisation = '';
+                    }
+                    return organisation;
+                }],
+                full_name: [function () {
+                    var label = '';
+                    if (this.label) {
+                        label = this.label + ' ';
+                    }
+                    return label + this.number;
+                }]
             }
         });
     }
@@ -217,6 +258,7 @@ angular.module('OpenSlidesApp.openslides_votecollector', ['OpenSlidesApp.users',
                         key = keys[seat.id];
                     }
                     seatingPlan.rows[seat.seating_plan_y_axis-1][seat.seating_plan_x_axis-1] = {
+                        'label': seat.label,
                         'css': css,
                         'number': seat.number,
                         'id': seat.id,
@@ -232,9 +274,23 @@ angular.module('OpenSlidesApp.openslides_votecollector', ['OpenSlidesApp.users',
 
                 // prebuild seatingPlan html table to speed up template rendering
                 var table = '<table>';
-                angular.forEach(seatingPlan.rows, function(row) {
+                var labels = [
+                    'IG Metall',
+                    '&nbsp;',
+                    'ver.di',
+                    'IG BCE',
+                    'IG BAU',
+                    'GdP',
+                    'NGG',
+                    'GEW',
+                    'EVG'
+                ]
+                angular.forEach(seatingPlan.rows, function(row, $rowindex) {
                     table += '<tr>';
-                    angular.forEach(row, function(seat) {
+                    angular.forEach(row, function(seat, $seatindex) {
+                        if ($seatindex == 0) {
+                            table += '<td class="label">' + labels[$rowindex] + '</td>';
+                        }
                         var css = '';
                         css += seat.css ? seat.css : '';
                         table += '<td class="' + css + '">';

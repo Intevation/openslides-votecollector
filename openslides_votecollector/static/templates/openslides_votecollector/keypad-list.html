@@ -166,7 +166,7 @@
 
         <!-- seat -->
         <td class="optional">
-          <span ng-if="keypad.seat">{{ keypad.seat.number }}</span>
+          <span ng-if="keypad.seat">{{ keypad.seat.full_name }}</span>
           <span ng-if="!keypad.seat">–</span>
 
         <!-- is present -->
@@ -201,10 +201,21 @@
         border: none;
         cursor: pointer;
     }
+    #seating-plan table td.label {
+        font-weight: bold;
+        color: #000000;
+        white-space: nowrap;
+        padding-top: 6px;
+        margin-right: 5px;
+        width: auto;
+    }
     #seating-plan table td.seat {
         border: 1px solid black;
         line-height: 120%;
         text-align: center;
+    }
+    #seating-plan table td.seat-grey {
+        background-color: #dedede;
     }
 </style>
 
@@ -214,6 +225,7 @@
   <div id="seating-plan">
     <table>
         <tr ng-repeat="row in seatingPlan.rows">
+          <td class="label">{{ row[0].label }}</td>
           <td ng-repeat="seat in row" ng-class="seat.css"
               ng-bootbox-prompt="{{ 'Change seat label for' | translate }} '{{seat.number}}':"
               ng-bootbox-prompt-action="changeSeat(seat, result)">

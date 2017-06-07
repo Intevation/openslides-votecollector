@@ -147,7 +147,7 @@ angular.module('OpenSlidesApp.openslides_votecollector.site', [
                     templateOptions: {
                         label: gettextCatalog.getString('Seat'),
                         options: Seat.getAll(),
-                        ngOptions: "option.id as option.number for option in to.options | orderBy: 'id'",
+                        ngOptions: "option.id as option.full_name for option in to.options | orderBy: 'id'",
                         placeholder: gettextCatalog.getString('--- Select seat ---')
                     }
                 }
@@ -434,7 +434,7 @@ angular.module('OpenSlidesApp.openslides_votecollector.site', [
                     keypaduser.seat_id = null;
                 } else {
                     angular.forEach(Seat.getAll(), function(seat) {
-                        if (seat.number == keypaduser.seat_label) {
+                        if (seat.id == keypaduser.seat_label) {
                             // check if the seat id already assigned to a keypad
                             angular.forEach(Keypad.getAll(), function(keypad) {
                                 if (keypad.seat_id == seat.id) {
